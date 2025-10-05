@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Network Diagnostics Pro</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            🌐 NetDiagnose 
+        </div>
+        <div class="nav-links">
+            <a href="#" class="nav-link active" onclick="showTool('speedtest')">Speed Test</a>
+            <a href="#" class="nav-link" onclick="showTool('networkinfo')">Network Info</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Quick Stats -->
+        <div class="quick-stats" id="quickStats">
+            <!-- Dynamically loaded -->
+        </div>
+
+        <div class="dashboard">
+            <!-- Sidebar with Tools -->
+            <div class="sidebar">
+                <div class="tool-card active" onclick="showTool('speedtest')">
+                    <div class="tool-icon">🚀</div>
+                    <h3>Speed Test</h3>
+                    <p>Test download, upload speeds and ping</p>
+                </div>
+                
+                <div class="tool-card" onclick="showTool('ping')">
+                    <div class="tool-icon">📡</div>
+                    <h3>Ping Test</h3>
+                    <p>Check latency to any host</p>
+                </div>
+                
+                <div class="tool-card" onclick="showTool('traceroute')">
+                    <div class="tool-icon">🛣️</div>
+                    <h3>Traceroute</h3>
+                    <p>Trace the route to any host</p>
+                </div>
+                
+                <div class="tool-card" onclick="showTool('portscan')">
+                    <div class="tool-icon">🔍</div>
+                    <h3>Port Scanner</h3>
+                    <p>Check if a port is open</p>
+                </div>
+                
+                <div class="tool-card" onclick="showTool('dns')">
+                    <div class="tool-icon">🌐</div>
+                    <h3>DNS Lookup</h3>
+                    <p>Find IP addresses for domains</p>
+                </div>
+                
+                <div class="tool-card" onclick="showTool('website')">
+                    <div class="tool-icon">📊</div>
+                    <h3>Website Status</h3>
+                    <p>Check website availability</p>
+                </div>
+                
+                <div class="tool-card" onclick="showTool('networkinfo')">
+                    <div class="tool-icon">💻</div>
+                    <h3>Network Info</h3>
+                    <p>View detailed network information</p>
+                </div>
+            </div>
+
+            <!-- Main Content Area -->
+            <div class="main-content">
+                <!-- Speed Test Tool -->
+                <div id="speedtest" class="tool-section active">
+                    <div class="section-header">
+                        <h2>Internet Speed Test</h2>
+                        <p>Measure your download, upload speeds and ping</p>
+                    </div>
+                    
+                    <button class="btn" onclick="startSpeedTest()">Start Speed Test</button>
+                    
+                    <div class="loading" id="speedtestLoading">
+                        <div class="spinner"></div>
+                        <p>Testing your connection...</p>
+                        <div class="progress-bar">
+                            <div class="progress" id="speedtestProgress"></div>
+                        </div>
+                        <p>This may take 30-60 seconds</p>
+                    </div>
+                    
+                    <div id="speedtestResult"></div>
+                </div>
+
+                <!-- Ping Tool -->
+                <div id="ping" class="tool-section">
+                    <div class="section-header">
+                        <h2>Ping Test</h2>
+                        <p>Check latency to any host or IP address</p>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="pingHost">Host or IP Address:</label>
+                        <input type="text" id="pingHost" placeholder="8.8.8.8" value="8.8.8.8">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="pingCount">Number of Pings:</label>
+                        <select id="pingCount">
+                            <option value="4">4 pings</option>
+                            <option value="8">8 pings</option>
+                            <option value="16">16 pings</option>
+                        </select>
+                    </div>
+                    
+                    <button class="btn" onclick="startPingTest()">Start Ping Test</button>
+                    
+                    <div class="loading" id="pingLoading">
+                        <div class="spinner"></div>
+                        <p>Pinging host...</p>
+                    </div>
+                    
+                    <div id="pingResult"></div>
+                </div>
+
+                <!-- Traceroute Tool -->
+                <div id="traceroute" class="tool-section">
+                    <div class="section-header">
+                        <h2>Traceroute</h2>
+                        <p>Trace the network path to any host</p>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="tracerouteHost">Host or Domain:</label>
+                        <input type="text" id="tracerouteHost" placeholder="google.com" value="google.com">
+                    </div>
+                    
+                    <button class="btn" onclick="startTraceroute()">Start Traceroute</button>
+                    
+                    <div class="loading" id="tracerouteLoading">
+                        <div class="spinner"></div>
+                        <p>Tracing route...</p>
+                    </div>
+                    
+                    <div id="tracerouteResult"></div>
+                </div>
+
+                <!-- Port Scanner Tool -->
+                <div id="portscan" class="tool-section">
+                    <div class="section-header">
+                        <h2>Port Scanner</h2>
+                        <p>Check if a specific port is open</p>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="portScanHost">Host or Domain:</label>
+                        <input type="text" id="portScanHost" placeholder="google.com" value="google.com">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="portScanPort">Port Number:</label>
+                        <input type="number" id="portScanPort" placeholder="80" value="80" min="1" max="65535">
+                    </div>
+                    
+                    <button class="btn" onclick="startPortScan()">Scan Port</button>
+                    
+                    <div class="loading" id="portScanLoading">
+                        <div class="spinner"></div>
+                        <p>Scanning port...</p>
+                    </div>
+                    
+                    <div id="portScanResult"></div>
+                </div>
+
+                <!-- DNS Lookup Tool -->
+                <div id="dns" class="tool-section">
+                    <div class="section-header">
+                        <h2>DNS Lookup</h2>
+                        <p>Find IP addresses for any domain</p>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="dnsDomain">Domain Name:</label>
+                        <input type="text" id="dnsDomain" placeholder="google.com" value="google.com">
+                    </div>
+                    
+                    <button class="btn" onclick="startDNSLookup()">Lookup DNS</button>
+                    
+                    <div class="loading" id="dnsLoading">
+                        <div class="spinner"></div>
+                        <p>Looking up DNS records...</p>
+                    </div>
+                    
+                    <div id="dnsResult"></div>
+                </div>
+
+                <!-- Website Status Tool -->
+                <div id="website" class="tool-section">
+                    <div class="section-header">
+                        <h2>Website Status Checker</h2>
+                        <p>Check if a website is online and response time</p>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="websiteUrl">Website URL:</label>
+                        <input type="text" id="websiteUrl" placeholder="https://google.com" value="https://google.com">
+                    </div>
+                    
+                    <button class="btn" onclick="checkWebsiteStatus()">Check Website</button>
+                    
+                    <div class="loading" id="websiteLoading">
+                        <div class="spinner"></div>
+                        <p>Checking website status...</p>
+                    </div>
+                    
+                    <div id="websiteResult"></div>
+                </div>
+
+                <!-- Network Information Tool -->
+                <div id="networkinfo" class="tool-section">
+                    <div class="section-header">
+                        <h2>Network Information</h2>
+                        <p>Detailed information about your network connection</p>
+                    </div>
+                    
+                    <button class="btn" onclick="loadNetworkInfo()">Refresh Information</button>
+                    
+                    <div class="loading" id="networkInfoLoading">
+                        <div class="spinner"></div>
+                        <p>Loading network information...</p>
+                    </div>
+                    
+                    <div id="networkInfoResult"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
